@@ -1,0 +1,233 @@
+{
+  "info": {
+    "name": "MySN API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "mysn-api-collection"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": { "method": "GET", "url": "{{baseUrl}}/v1/health" }
+    },
+    {
+      "name": "Users / Create",
+      "request": {
+        "method": "POST",
+        "header": [ { "key":"Content-Type","value":"application/json" } ],
+        "body": { "mode":"raw", "raw": "{\n  \"email\":\"alice@example.com\",\n  \"firstName\":\"Alice\",\n  \"lastName\":\"A\"\n}" },
+        "url": "{{baseUrl}}/v1/users"
+      }
+    },
+    {
+      "name": "Users / List",
+      "request": { "method": "GET", "url": "{{baseUrl}}/v1/users" }
+    },
+    {
+      "name": "Users / Get by ID",
+      "request": { "method": "GET", "url": "{{baseUrl}}/v1/users/{{userId}}" }
+    },
+    {
+      "name": "Events / Create",
+      "request": {
+        "method": "POST",
+        "header": [ { "key":"Content-Type","value":"application/json" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"title\":\"Meetup JS\",\n  \"description\":\"Rencontre\",\n  \"startAt\":\"2025-11-20T18:00:00Z\",\n  \"endAt\":\"2025-11-20T21:00:00Z\",\n  \"location\":{\"address\":\"Paris\"},\n  \"isPublic\":true\n}" },
+        "url": "{{baseUrl}}/v1/events"
+      }
+    },
+    {
+      "name": "Events / List (publicOnly=true)",
+      "request": { "method": "GET", "url": "{{baseUrl}}/v1/events?publicOnly=true" }
+    },
+    {
+      "name": "Events / Get by ID",
+      "request": { "method": "GET", "url": "{{baseUrl}}/v1/events/{{eventId}}" }
+    },
+    {
+      "name": "Events / Add Organizer",
+      "request": {
+        "method": "POST",
+        "header": [ { "key":"Content-Type","value":"application/json" } ],
+        "body": { "mode":"raw", "raw": "{\n  \"userId\": \"{{userId}}\"\n}" },
+        "url": "{{baseUrl}}/v1/events/{{eventId}}/organizers"
+      }
+    },
+    {
+      "name": "Events / List Organizers",
+      "request": { "method": "GET", "url": "{{baseUrl}}/v1/events/{{eventId}}/organizers" }
+    },
+    {
+      "name": "Events / Add or Update Participant",
+      "request": {
+        "method": "POST",
+        "header": [ { "key":"Content-Type","value":"application/json" } ],
+        "body": { "mode":"raw", "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"status\": \"going\"\n}" },
+        "url": "{{baseUrl}}/v1/events/{{eventId}}/participants"
+      }
+    },
+    {
+      "name": "Events / List Participants",
+      "request": { "method": "GET", "url": "{{baseUrl}}/v1/events/{{eventId}}/participants" }
+    },
+    {
+      "name": "Groups / Create",
+      "request": {
+        "method": "POST",
+        "header": [ { "key":"Content-Type","value":"application/json" } ],
+        "body": { "mode":"raw", "raw": "{\n  \"name\":\"JS Paris\",\n  \"description\":\"Groupe JS\",\n  \"visibility\":\"public\",\n  \"allowMemberPosts\":true,\n  \"allowMemberEvents\":true\n}" },
+        "url": "{{baseUrl}}/v1/groups"
+      }
+    },
+    {
+      "name": "Groups / List (visibility=public)",
+      "request": { "method": "GET", "url": "{{baseUrl}}/v1/groups?visibility=public" }
+    },
+    {
+      "name": "Groups / Get by ID",
+      "request": { "method": "GET", "url": "{{baseUrl}}/v1/groups/{{groupId}}" }
+    },
+    {
+      "name": "Groups / Add Member (admin/member)",
+      "request": {
+        "method": "POST",
+        "header": [ { "key":"Content-Type","value":"application/json" } ],
+        "body": { "mode":"raw", "raw": "{\n  \"userId\":\"{{userId}}\",\n  \"role\":\"admin\"\n}" },
+        "url": "{{baseUrl}}/v1/groups/{{groupId}}/members"
+      }
+    },
+    {
+      "name": "Groups / List Members",
+      "request": { "method": "GET", "url": "{{baseUrl}}/v1/groups/{{groupId}}/members" }
+    },
+    {
+      "name": "Threads / Create for Group",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": { "mode":"raw", "raw": "{\n  \"scope\": {\"type\":\"group\",\"id\":\"{{groupId}}\"}\n}" },
+        "url": "{{baseUrl}}/v1/threads"
+      }
+    },
+    {
+      "name": "Threads / Get by ID",
+      "request": { "method":"GET", "url": "{{baseUrl}}/v1/threads/{{threadId}}" }
+    },
+    {
+      "name": "Threads / Post Message",
+      "request": {
+        "method": "POST",
+        "header": [ { "key":"Content-Type","value":"application/json" } ],
+        "body": { "mode":"raw", "raw": "{\n  \"authorId\":\"{{userId}}\",\n  \"body\":\"Hello group!\"\n}" },
+        "url": "{{baseUrl}}/v1/threads/{{threadId}}/messages"
+      }
+    },
+    {
+      "name": "Threads / List Messages",
+      "request": { "method":"GET", "url": "{{baseUrl}}/v1/threads/{{threadId}}/messages" }
+    },
+    {
+      "name": "Polls / Create for Event",
+      "request": {
+        "method": "POST",
+        "header": [ { "key":"Content-Type","value":"application/json" } ],
+        "body": { "mode":"raw", "raw": "{\n  \"title\":\"Dispo?\",\n  \"questions\":[{\"text\":\"Jour?\",\"options\":[{\"text\":\"Samedi\"},{\"text\":\"Dimanche\"}]}]\n}" },
+        "url": "{{baseUrl}}/v1/events/{{eventId}}/polls"
+      }
+    },
+    {
+      "name": "Polls / List for Event",
+      "request": { "method": "GET", "url": "{{baseUrl}}/v1/events/{{eventId}}/polls" }
+    },
+    {
+      "name": "Polls / Vote on Question",
+      "request": {
+        "method": "POST",
+        "header": [ { "key":"Content-Type","value":"application/json" } ],
+        "body": { "mode":"raw", "raw": "{\n  \"voterId\":\"{{userId}}\",\n  \"questionId\":\"{{questionId}}\",\n  \"optionId\":\"{{optionId}}\"\n}" },
+        "url": "{{baseUrl}}/v1/polls/{{pollId}}/votes"
+      }
+    },
+    {
+      "name": "Polls / Results",
+      "request": { "method":"GET", "url": "{{baseUrl}}/v1/polls/{{pollId}}/results" }
+    },
+    {
+      "name": "Albums / Create for Event",
+      "request": {
+        "method":"POST",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{\n  \"title\":\"Photos Meetup\"\n}"},
+        "url":"{{baseUrl}}/v1/events/{{eventId}}/albums"
+      }
+    },
+    {
+      "name": "Albums / List for Event",
+      "request": { "method":"GET", "url":"{{baseUrl}}/v1/events/{{eventId}}/albums" }
+    },
+    {
+      "name": "Albums / Add Photo",
+      "request": {
+        "method":"POST",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{\n  \"authorId\":\"{{userId}}\",\n  \"url\":\"https://picsum.photos/seed/42/600/400\",\n  \"caption\":\"Souvenir\"\n}"},
+        "url":"{{baseUrl}}/v1/albums/{{albumId}}/photos"
+      }
+    },
+    {
+      "name": "Albums / List Photos",
+      "request": { "method":"GET", "url":"{{baseUrl}}/v1/albums/{{albumId}}/photos" }
+    },
+    {
+      "name": "Photos / Add Comment",
+      "request": {
+        "method":"POST",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{\n  \"authorId\":\"{{userId}}\",\n  \"body\":\"Trop bien !\"\n}"},
+        "url":"{{baseUrl}}/v1/photos/{{photoId}}/comments"
+      }
+    },
+    {
+      "name": "Photos / List Comments",
+      "request": { "method":"GET", "url":"{{baseUrl}}/v1/photos/{{photoId}}/comments" }
+    },
+    {
+      "name": "Ticketing / Create Ticket Type",
+      "request": {
+        "method":"POST",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{\n  \"name\":\"Early Bird\",\n  \"price\":10,\n  \"currency\":\"EUR\",\n  \"quantity\":100\n}"},
+        "url":"{{baseUrl}}/v1/events/{{eventId}}/ticket-types"
+      }
+    },
+    {
+      "name": "Ticketing / List Ticket Types",
+      "request": { "method":"GET", "url":"{{baseUrl}}/v1/events/{{eventId}}/ticket-types" }
+    },
+    {
+      "name": "Ticketing / Create Order",
+      "request": {
+        "method":"POST",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{\n  \"ticketTypeId\":\"{{ticketTypeId}}\",\n  \"purchaser\":{\n    \"firstName\":\"John\",\n    \"lastName\":\"Smith\",\n    \"email\":\"john@example.com\",\n    \"address\":\"10 Rue Exemple, 75000 Paris\"\n  }\n}"},
+        "url":"{{baseUrl}}/v1/events/{{eventId}}/orders"
+      }
+    },
+    {
+      "name": "Ticketing / List Orders",
+      "request": { "method":"GET", "url":"{{baseUrl}}/v1/events/{{eventId}}/orders" }
+    }
+  ],
+  "variable": [
+    { "key":"baseUrl", "value":"http://localhost:3001" },
+    { "key":"userId", "value":"" },
+    { "key":"eventId", "value":"" },
+    { "key":"groupId", "value":"" },
+    { "key":"threadId", "value":"" },
+    { "key":"pollId", "value":"" },
+    { "key":"questionId", "value":"" },
+    { "key":"optionId", "value":"" },
+    { "key":"albumId", "value":"" },
+    { "key":"photoId", "value":"" },
+    { "key":"ticketTypeId", "value":"" }
+  ]
+}

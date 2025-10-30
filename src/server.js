@@ -1,0 +1,54 @@
+import express from 'express'
+import cors from 'cors'
+import helmet from 'helmet'
+import morgan from 'morgan'
+import dotenv from 'dotenv'
+import eventsRouter from './routes/events.js'
+import usersRouter from './routes/users.js'
+import groupsRouter from './routes/groups.js'
+import threadsRouter from './routes/threads.js'
+import pollsRouter from './routes/polls.js'
+import albumsRouter from './routes/albums.js'
+import ticketingRouter from './routes/ticketing.js'
+
+dotenv.config()
+
+const app = express()
+
+app.use(helmet())
+app.use(cors())
+app.use(express.json({ limit: '1mb' }))
+app.use(morgan('dev'))
+
+// Health
+app.get('/v1/health', (_req, res) => {
+  res.json({ ok: true, service: 'mysn-api', version: '0.1.0', time: new Date().toISOString() })
+})
+
+// Routes
+app.use('/v1/events', eventsRouter)
+app.use('/v1/users', usersRouter)
+app.use('/v1/groups', groupsRouter)
+app.use('/v1/threads', threadsRouter)
+app.use('/v1', pollsRouter)      // exposes /events/:eventId/polls & /polls/:pollId/...
+app.use('/v1', albumsRouter)     // exposes /events/:eventId/albums & /albums/:id/...
+app.use('/v1', ticketingRouter)  // exposes /events/:eventId/ticket-types & /orders
+
+// 404
+app.use((req, res) => {
+  res.status(404).json({ error: { code: 'NOT_FOUND', message: `No route ${req.method} ${req.path}` } })
+})
+
+// Error handler
+app.use((err, _req, res, _next) => {
+  console.error(err)
+  if (err.status) {
+    return res.status(err.status).json({ error: { code: err.code || 'ERROR', message: err.message } })
+  }
+  res.status(500).json({ error: { code: 'INTERNAL', message: 'Unexpected error' } })
+})
+
+const port = process.env.PORT || 3000
+app.listen(port, () => {
+  console.log(`MySN API listening on http://localhost:${port}`)
+})
