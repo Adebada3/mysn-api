@@ -5,3 +5,6 @@ npm-debug.log*
 yarn-*.log*
 logs
 *.log
+
+# Editors
+*.save
